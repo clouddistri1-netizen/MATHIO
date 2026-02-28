@@ -1,0 +1,235 @@
+/* public/css/style.css */
+
+/* ------------------- */
+/* ESTILOS GERAIS      */
+/* ------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* public/css/style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #181818; /* Dark background */
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+    max-width: 800px;
+  }
+  
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #242424; /* Dark panel background */
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+  }
+  
+  .menu-item:hover {
+    background-color: #1e1e1e; /* Slightly brighter on hover */
+    transform: scale(1.02); /* Zoom effect */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.8);
+  }
+  
+  .menu-icon {
+    font-size: 50px;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #ee3db9; /* Accent color for the icon */
+  }
+
+  .menu-icon2 {
+    font-size: 50px;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #77ff72; /* Accent color for the icon */
+  }
+  
+  .menu-icon3 {
+    font-size: 50px;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #ff8c72; /* Accent color for the icon */
+  }
+
+  .menu-icon5 {
+    font-size: 50px;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #f33d3d; /* Accent color for the icon */
+  }
+
+  .menu-icon4 {
+    font-size: 50px;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #44e4ed; /* Accent color for the icon */
+  }
+
+  .menu-text h2 {
+    font-size: 24px;
+    margin: 0;
+    color: #ffffff;
+  }
+  
+  .menu-text p {
+    font-size: 14px;
+    color: #c0c0c0; /* Secondary text color */
+    margin: 5px 0 0;
+  }
+  
+
+/* ------------------- */
+/* ESTILOS DO JOGO     */
+/* ------------------- */
+.game-body {
+    background: linear-gradient(135deg, #121212, #1f1f1f); /* Fundo escuro com gradiente */
+    height: 100vh; /* Ocupa toda a altura da tela */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espaça bem os elementos */
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    margin: 20px 0 10px 0;
+    color: #ffffff; /* Títulos brancos para contraste */
+}
+
+#scoreboard,
+#timer {
+    margin: 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ddd; /* Texto suavemente claro */
+}
+
+#main-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 15px; /* Borda arredondada para um visual mais suave */
+    background: linear-gradient(135deg, #333, #555); /* Fundo com gradiente escuro */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra mais intensa */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff; /* Contraste com o gradiente */
+    border: 2px solid #444; /* Borda mais escura */
+    margin: 40px 0; /* Espaço ao redor do retângulo */
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s; /* Suaviza o movimento ao interagir */
+}
+
+#main-circle:hover {
+    transform: scale(1.1); /* Ampliação leve ao passar o mouse */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7); /* Sombra mais intensa no hover */
+}
+
+#main-circle span {
+    z-index: 10; /* Para que apareça na frente */
+}
+
+#floating-circles-container {
+    width: 80%;
+    height: 300vh; /* Faz o container ocupar mais espaço */
+    position: relative;
+    border: 2px dashed #555; /* Borda pontilhada escura */
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+/* Bolinhas */
+.floating-circle {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s; /* Suaviza movimentos ou interações */
+}
+
+.floating-circle:hover {
+    transform: scale(1.2); /* Efeito de destaque ao passar o mouse */
+}
+
+/* Cores para cada operação */
+.circle-azul {
+    background-color: #2196f3;
+}
+
+.circle-vermelho {
+    background-color: #f44336;
+}
+
+.circle-amarelo {
+    background-color: #ffeb3b;
+    color: #333; /* Contraste para texto amarelo claro */
+}
+
+.circle-roxo {
+    background-color: #9c27b0;
+}
+
+.circle-verde {
+    background-color: #4caf50;
+}
+
+#saved-number-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2em;
+    color: #fff; /* Texto claro */
+    background: #444; /* Fundo escuro */
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+}
+
+#music-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1em;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#music-popup.show {
+  opacity: 1;
+}

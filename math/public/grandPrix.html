@@ -1,0 +1,108 @@
+<!-- public/game.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MATHR.IO</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <style>
+      #music-popup {
+        position: fixed;
+        bottom: 20px;
+        left: 80%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 2em;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        white-space: nowrap; /* Prevent text from wrapping */
+        overflow: hidden; /* Hide overflowing text */
+        text-overflow: ellipsis; /* Add "..." for overflowing text */
+        max-width: 90%; /* Ensure the pop-up doesn't exceed the screen width */
+      }
+      #music-popup.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="game-body">
+    <div id="timer">
+      Timer: <span id="timeLeft">0</span>s
+    </div>
+
+    <div id="main-circle">
+      <!-- Bola “bonita” do objetivo -->
+      <span id="current">0</span> / <span id="goal">--</span>
+    </div>
+
+
+
+    <div id="floating-circles-container"></div>
+
+    <div id="scoreboard">
+        Points: <span id="score">0</span>
+    </div>
+
+    <div id="music-popup">Playing: </div>
+
+    <div id="saved-number-container">
+        Save: <span id="saved-number">1</span>
+      </div>
+
+    <script src="script/grandPrix.js"></script>
+
+    <script>
+      // Function to fetch the list of music files from the server
+      async function fetchMusicFiles() {
+        try {
+          const response = await fetch('/music-files');
+          if (!response.ok) throw new Error('Erro ao buscar arquivos de música.');
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+          return [];
+        }
+      }
+
+      // Function to display a pop-up with the music name
+      function showMusicPopup(fileName) {
+        const musicPopup = document.getElementById('music-popup');
+        musicPopup.textContent = `${fileName}`;
+        musicPopup.classList.add('show');
+        setTimeout(() => musicPopup.classList.remove('show'), 3000);
+      }
+
+      // Function to extract the file name without extension from the URL
+      function getFileNameFromUrl(url) {
+        return url.split('/').pop().split('.').slice(0, -1).join('.');
+      }
+
+      // Function to play a random music file
+      async function playRandomMusic() {
+        const musicFiles = await fetchMusicFiles();
+        if (musicFiles.length === 0) {
+          console.error('Nenhuma música encontrada.');
+          return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * musicFiles.length);
+        const musicFile = musicFiles[randomIndex];
+        const audio = new Audio(`/music/${musicFile}`);
+        audio.play();
+
+        showMusicPopup(getFileNameFromUrl(musicFile));
+
+        // Restart music when it ends
+        audio.addEventListener('ended', playRandomMusic);
+      }
+
+      // Start playing music when the page loads
+      window.addEventListener('load', playRandomMusic);
+    </script>
+
+  </body>
+</html>

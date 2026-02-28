@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATHR.IO - Records</title>
+  <link rel="icon" type="image/png" href="images/icon.jpg">
+  <link rel="stylesheet" href="css/style_lg.css" />
+  <style>
+    /* Layout principal */
+    body {
+      display: flex;
+      flex-direction: column; /* Alinha os elementos verticalmente */
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      background-color: #181818; /* Fundo escuro */
+      color: white;
+    }
+
+    /* Menu (abas) no topo */
+    .tab-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px; /* Espaçamento entre as abas */
+      margin-top: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: 2px solid #444;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .tab:hover {
+      background-color: #444;
+    }
+
+    .tab.active {
+      background-color: #555;
+      font-weight: bold;
+    }
+
+    /* Conteúdo centralizado */
+    .content-container {
+      display: flex;
+      flex-direction: column; /* Empilha a lista e o botão verticalmente */
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1; /* Ocupa o espaço restante abaixo do menu */
+    }
+
+    .record-list {
+      width: 600px;
+      padding: 20px;
+      background-color: #242424;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .record-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .record-list li {
+      margin: 10px 0;
+      font-size: 1.2em;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #aaa;
+    }
+
+    /* Botão de voltar */
+    .back-button {
+      text-align: center;
+      padding: 10px 20px;
+      background-color: #ff4d4d;
+      color: white;
+      font-size: 1.2em;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #e43d3d;
+    }
+  </style>
+</head>
+<body>
+  <!-- Menu no topo -->
+  <div class="tab-container">
+    <div class="tab active" data-tab="zen">Zen</div>
+    <div class="tab" data-tab="blitz">Blitz</div>
+    <div class="tab" data-tab="grandPrix">Grand Prix</div>
+    <div class="tab" data-tab="mayhem">Mayhem</div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="content-container">
+    <div id="recordContent" class="record-list"></div>
+    <button class="back-button" id="backButton">Return</button>
+  </div>
+
+  <script>
+    const recordContent = document.getElementById('recordContent');
+    const backButton = document.getElementById('backButton');
+    
+    // Obter o nome do jogador da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const playerName = urlParams.get('playerName');
+    
+    // Atualizar o botão "Voltar" para incluir o nome do jogador
+    if (playerName) {
+      backButton.onclick = () => {
+        window.location.href = `/index?playerName=${playerName}`;
+      };
+    } else {
+      backButton.onclick = () => {
+        window.location.href = '/index';
+      };
+    }
+    
+    let playerCode = null;
+    
+    // Função para buscar o código do jogador
+    const fetchPlayerCode = () => {
+      if (!playerName) {
+        console.error('Player name not found in URL!');
+        return Promise.reject('Player name is required');
+      }
+    
+      return fetch(`/player-code?playerName=${playerName}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch player code');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          playerCode = data.playerCode;
+          console.log('Player code fetched:', playerCode);
+        })
+        .catch((error) => {
+          console.error('Error fetching player code:', error);
+        });
+    };
+    
+    // Função para buscar e exibir os registros
+    const fetchRecords = (endpoint, mode) => {
+      fetch(endpoint)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.records.length === 0) {
+            recordContent.innerHTML = `<p class="empty-message">No records available for ${mode} mode.</p>`;
+          } else {
+            const list = document.createElement('ul');
+            data.records.forEach((record) => {
+              const listItem = document.createElement('li');
+    
+              // Verifica se o código do jogador corresponde ao registro
+              const pcode = record.match(/^([^:]+) :/)[0];
+              const playerCodeMatch = record.match(/#([A-Z0-9]{6})/);
+              if (playerCodeMatch && playerCodeMatch[1] === playerCode && pcode == playerName + " :") {
+                listItem.style.color = 'gold';
+                listItem.style.fontSize = '1.5em';
+                listItem.style.fontWeight = 'bold';
+              }
+    
+              listItem.textContent = record;
+              list.appendChild(listItem);
+            });
+            recordContent.innerHTML = '';
+            recordContent.appendChild(list);
+          }
+        })
+        .catch((error) => {
+          console.error(`Error fetching ${mode} records:`, error);
+        });
+    };
+    
+    // Tab switching logic
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+    
+        const selectedTab = tab.getAttribute('data-tab');
+        if (selectedTab === 'zen') {
+          fetchRecords('/zen-records', 'Zen');
+        } else if (selectedTab === 'blitz') {
+          fetchRecords('/blitz-records', 'Blitz');
+        } else if (selectedTab === 'grandPrix') {
+          fetchRecords('/grandPrix-records', 'Grand Prix');
+        } else {
+          recordContent.innerHTML = '<p class="empty-message">No records available for this mode.</p>';
+        }
+      });
+    });
+    
+    // Iniciar a aplicação
+    fetchPlayerCode().then(() => {
+      // Carregar os registros Zen por padrão após obter o código do jogador
+      fetchRecords('/zen-records', 'Zen');
+    });
+  </script>
+</body>
+</html>

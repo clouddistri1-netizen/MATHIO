@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATHR.IO - How to Play</title>
+  <link rel="icon" type="image/png" href="images/icon.png">
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 0;
+      padding: 20px;
+      background-color: #181818;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    h1#welcomeTitle {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .menu-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .menu-item {
+      position: relative;
+      padding: 20px;
+      background-color: #242424;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s;
+      text-align: center;
+    }
+
+    .menu-item:hover {
+      transform: scale(1.02);
+    }
+
+    .menu-item h2 {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .menu-item img {
+      margin-top: 60px;
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .back-button {
+      display: inline-block;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      background-color: #ff4d4d;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
+
+    .back-button:hover {
+      background-color: #e43d3d;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="welcomeTitle">
+    <script>
+      const text = "Welcome!";
+      const colors = ["#ff4d4d", "#ffffff"];
+
+      text.split("").forEach((char) => {
+        const span = document.createElement("span");
+        span.classList.add("letter");
+        span.textContent = char === " " ? "\u00A0" : char; // Adiciona espaços corretamente
+        span.style.color = colors[Math.floor(Math.random() * colors.length)];
+        document.getElementById("welcomeTitle").appendChild(span);
+      });
+    </script>
+  </h1>
+  <div class="menu-container">
+    <div class="menu-item">
+      <h2>The Objective</h2>
+      <img src="images/1.png" alt="The Objective">
+    </div>
+    <div class="menu-item">
+      <h2>Example</h2>
+      <img src="images/2.png" alt="Example">
+    </div>
+    <div class="menu-item">
+      <h2>Operations by Color</h2>
+      <img src="images/3.png" alt="Operations by Color">
+    </div>
+    <div class="menu-item">
+      <h2>Game Modes</h2>
+      <img src="images/4.png" alt="Game Modes">
+    </div>
+    <button class="back-button" id="backButton">Return</button>
+  </div>
+
+  <script>
+    // Get playerName from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const playerName = urlParams.get('playerName');
+
+    // Update Back button with playerName
+    const backButton = document.getElementById('backButton');
+    if (playerName) {
+      backButton.onclick = () => {
+        window.location.href = `/index?playerName=${playerName}`;
+      };
+    } else {
+      backButton.onclick = () => {
+        window.location.href = '/index';
+      };
+    }
+  </script>
+</body>
+</html>

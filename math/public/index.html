@@ -1,0 +1,75 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MATHR.IO</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="images/icon.png">
+  </head>
+  <body class="menu-body">
+    <div class="menu-container">
+      <h1>Welcome, <span id="playerNameDisplay"></span>!</h1>
+      <a href="/game" class="menu-item" id="startGame">
+        <span class="menu-icon">Z</span>
+        <div class="menu-text">
+          <h2>Zen</h2>
+          <p>Focus and improve your skills</p>
+        </div>
+      </a>
+      <a href="/blitz" class="menu-item" id="blitzID">
+        <span class="menu-icon3">B</span>
+        <div class="menu-text">
+          <h2>Blitz</h2>
+          <p>A Two-minute race against the clock</p>
+        </div>
+      </a>
+      <a href="/grandPrix" class="menu-item" id="gpID">
+        <span class="menu-icon4">G</span>
+        <div class="menu-text">
+          <h2>Grand Prix</h2>
+          <p>Race until the finish line</p>
+        </div>
+      </a>
+      <a href="/record" class="menu-item" id="viewRecords">
+        <span class="menu-icon2">R</span>
+        <div class="menu-text">
+          <h2>Records</h2>
+          <p>View the top players</p>
+        </div>
+      </a>
+      <a href="/basics" class="menu-item" id="howToPlay">
+        <span class="menu-icon5">H</span>
+        <div class="menu-text">
+          <h2>How to play</h2>
+          <p>Discover the gameplay mechanics</p>
+        </div>
+      </a>
+    </div>
+    <script>
+      // Obter o nome do jogador da URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const playerName = urlParams.get('playerName');
+      if (playerName) {
+        document.getElementById('playerNameDisplay').textContent = playerName;
+        const startGameLink = document.getElementById('startGame');
+        startGameLink.href = `/game?playerName=${playerName}`; // Passa o nome do jogador para o jogo
+        
+        const blitz = document.getElementById('blitzID');
+        blitz.href = `/blitz?playerName=${playerName}`; // Passa o nome do jogador para o jogo
+
+        const gp = document.getElementById('gpID');
+        gp.href = `/grandPrix?playerName=${playerName}`; // Passa o nome do jogador para o jogo
+
+        const tut = document.getElementById('howToPlay');
+        tut.href = `/basics?playerName=${playerName}`; // Passa o nome do jogador para o jogo
+
+        const viewRecordsLink = document.getElementById('viewRecords');
+        viewRecordsLink.href = `/record?playerName=${playerName}`; // Passa o nome do jogador para a página de records
+      } else {
+        window.location.href = '/login'; // Redireciona para o login caso o nome não esteja presente
+      }
+      
+    </script>
+  </body>
+</html>

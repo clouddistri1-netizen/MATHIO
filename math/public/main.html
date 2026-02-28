@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATHR.IO</title>
+</head>
+<body>
+  <!-- Persistent music player iframe -->
+  <iframe 
+    src="/player.html" 
+    id="music-player" 
+    style="display:none;" 
+    allow="autoplay">
+  </iframe>
+
+  <!-- Content iframe starts with login.html -->
+  <iframe 
+    src="/login" 
+    id="content-frame" 
+    style="width:100%; height:100vh; border:none;">
+  </iframe>
+
+  <script>
+    // Navigation function to switch content pages dynamically
+    function navigateToPage(page, queryParams = '') {
+      const contentFrame = document.getElementById('content-frame');
+      contentFrame.src = `/${page}${queryParams}`;
+    }
+  </script>
+</body>
+</html>

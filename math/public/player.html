@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Player</title>
+  <link rel="icon" type="image/png" href="images/icon.jpg">
+  <style>
+    #music-popup {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 1em;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    #music-popup.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <audio id="background-music" autoplay></audio>
+  <div id="music-popup">Playing: </div>
+
+  <script>
+    const audioElement = document.getElementById('background-music');
+    const musicPopup = document.getElementById('music-popup');
+
+    // Save the current track and playback position in localStorage
+    function saveMusicState(src, currentTime) {
+      localStorage.setItem('currentTrack', src);
+      localStorage.setItem('currentTime', currentTime);
+    }
+
+    // Retrieve the saved track and playback position from localStorage
+    function loadMusicState() {
+      const src = localStorage.getItem('currentTrack');
+      const currentTime = parseFloat(localStorage.getItem('currentTime')) || 0;
+      return { src, currentTime };
+    }
+
+    // Display the pop-up with the music name
+    function showMusicPopup(fileName) {
+      musicPopup.textContent = `Playing: ${fileName}`;
+      musicPopup.classList.add('show');
+      setTimeout(() => musicPopup.classList.remove('show'), 3000);
+    }
+
+    // Extract file name from URL
+    function getFileNameFromUrl(url) {
+      return url.split('/').pop().split('.').slice(0, -1).join('.');
+    }
+
+    // Function to fetch and play a random music track
+    async function loadRandomMusic() {
+      try {
+        const response = await fetch('/random-music');
+        if (!response.ok) throw new Error('Failed to fetch music');
+        const fileUrl = response.url;
+
+        audioElement.src = fileUrl;
+        saveMusicState(fileUrl, 0); // Save new music state
+        await audioElement.play();
+        showMusicPopup(getFileNameFromUrl(fileUrl)); // Show pop-up
+      } catch (error) {
+        console.error('Error loading random music:', error);
+      }
+    }
+
+    // Initialize the music player
+    async function initializePlayer() {
+      const { src, currentTime } = loadMusicState();
+
+      if (src) {
+        audioElement.src = src;
+        audioElement.currentTime = currentTime;
+
+        try {
+          await audioElement.play();
+          showMusicPopup(getFileNameFromUrl(src));
+        } catch (error) {
+          console.error('Error resuming saved track:', error);
+          loadRandomMusic();
+        }
+      } else {
+        loadRandomMusic();
+      }
+    }
+
+    // Event: Save current state during playback
+    audioElement.addEventListener('timeupdate', () => {
+      saveMusicState(audioElement.src, audioElement.currentTime);
+    });
+
+    // Event: Load a new track when one ends
+    audioElement.addEventListener('ended', () => {
+      loadRandomMusic();
+    });
+
+    window.addEventListener('DOMContentLoaded', initializePlayer);
+  </script>
+</body>
+</html>

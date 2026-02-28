@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MATHR.IO</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" href="images/icon.jpg">
+</head>
+<body>
+  <h1>Multiplayer Battle</h1>
+  <p>Player 1: <span id="player1Name"></span> | Points: <span id="player1Score">0</span></p>
+  <p>Player 2: <span id="player2Name"></span> | Points: <span id="player2Score">0</span></p>
+  
+  <!-- Container for the floating circles -->
+  <div id="floating-circles-container" style="position:relative; width: 800px; height: 600px; border: 1px solid #ccc;">
+    <!-- Circles appear here -->
+  </div>
+
+  <p id="info"></p>
+
+  <script src="script/multiplayer.js"></script>
+  <script>
+    // Get query parameters for player1 and player2
+    const urlParams = new URLSearchParams(window.location.search);
+    const player1 = urlParams.get('player1');
+    const player2 = urlParams.get('player2');
+    const myName = urlParams.get('myName'); 
+    // "myName" is whichever of the two we are controlling
+
+    document.getElementById('player1Name').textContent = player1;
+    document.getElementById('player2Name').textContent = player2;
+
+    // Initialize the game in multiplayer mode
+    window.addEventListener('load', () => {
+      initMultiplayerGame(player1, player2, myName);
+    });
+  </script>
+</body>
+</html>

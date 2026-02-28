@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATHR.IO</title>
+  <link rel="stylesheet" href="css/style_lg.css" />
+  <link rel="icon" type="image/png" href="images/icon.png">
+  <style>
+    #welcomeTitle {
+      display: inline; /* As letras permanecem na mesma linha */
+      font-size: 2.5em;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .letter {
+      display: inline; /* Cada letra permanece no mesmo fluxo de texto */
+      color: #fff;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .letter:hover {
+      transform: scale(1.3); /* Efeito de zoom ao passar o mouse */
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1 id="welcomeTitle">
+      <script>
+        const text = "Welcome!";
+        const colors = [
+        "#ff4d4d", "#ffffff"
+        ];
+
+        text.split("").forEach((char) => {
+          const span = document.createElement("span");
+          span.classList.add("letter");
+          span.textContent = char === " " ? "\u00A0" : char; // Adiciona espaços corretamente
+          span.style.color = colors[Math.floor(Math.random() * colors.length)];
+          document.getElementById("welcomeTitle").appendChild(span);
+        });
+      </script>
+    </h1>
+    <form action="/index" method="get">
+      <label for="playerName">Username:</label>
+      <input type="text" id="playerName" name="playerName" required>
+      <button type="submit">Join</button>
+    </form>
+  </div>
+</body>
+</html>
